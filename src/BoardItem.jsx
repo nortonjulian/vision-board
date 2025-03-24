@@ -64,7 +64,8 @@ const BoardItem = ({ item, onDelete, onUpdate }) => {
       {/* Gallery Section */}
       {item.type === "gallery" && (
         <div>
-          <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
+          <input type="file" className="custom-file-upload" accept="image/*" multiple onChange={handleImageUpload} />
+          
           {images.length === 1 ? <img src={images[0]} alt="Uploaded" width="100%" /> : <ImageCarousel images={images} setImages={setImages} />}
 
           {/* Caption Section */}
