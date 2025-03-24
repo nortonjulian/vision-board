@@ -75,7 +75,7 @@ h1 {
 .board-item {
   width: calc(25% - 20px);
   min-width: 200px;
-  max-width: 300px;
+  max-width: 400px;
   border: 1px solid #ccc;
   padding: 10px;
   background: #f9f9f9;
