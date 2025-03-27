@@ -41,6 +41,14 @@ function App() {
         <button onClick={() => addItem("text")}>Add Text</button>
       </div>
 
+      {/* <div className="container">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div key={i} className="item">
+            {i + 1}
+          </div>
+        ))}
+      </div> */}
+
       <div className="board">
         {board.map((item) => (
           <BoardItem key={item.id} item={item} onDelete={deleteItem} onUpdate={updateItem} />

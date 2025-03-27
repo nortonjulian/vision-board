@@ -43,48 +43,48 @@ const BoardItem = ({ item, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="board-item">
-      {/* Text Section */}
-      {item.type === "text" && (
-        <div>
-          {isEditingText ? (
-            <>
-              <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Write something..." />
-              <button onClick={handleSaveText}>Save</button>
-            </>
-          ) : (
-            <>
-              <p onClick={() => setIsEditingText(true)}>{text || "Click to edit..."}</p>
-              {text && <button onClick={() => setIsEditingText(true)}>Edit</button>}
-            </>
+    <div className={`board-item ${item.type}`}>
+        {/* Text Section */}
+          {item.type === "text" && (
+            <div>
+              {isEditingText ? (
+                <>
+                  <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Write something..." />
+                  <button onClick={handleSaveText}>Save</button>
+                </>
+              ) : (
+                <>
+                  <p onClick={() => setIsEditingText(true)}>{text || "Click to edit..."}</p>
+                  {text && <button onClick={() => setIsEditingText(true)}>Edit</button>}
+                </>
+              )}
+            </div>
           )}
-        </div>
-      )}
 
-      {/* Gallery Section */}
-      {item.type === "gallery" && (
-        <div>
-          <input type="file" className="custom-file-upload" accept="image/*" multiple onChange={handleImageUpload} />
-          
-          {images.length === 1 ? <img src={images[0]} alt="Uploaded" width="100%" /> : <ImageCarousel images={images} setImages={setImages} />}
+          {/* Gallery Section */}
+          {item.type === "gallery" && (
+            <div>
+              <input type="file" className="custom-file-upload" accept="image/*" multiple onChange={handleImageUpload} />
+              
+              {images.length === 1 ? <img src={images[0]} alt="Uploaded" width="100%" /> : <ImageCarousel images={images} setImages={setImages} />}
 
-          {/* Caption Section */}
-          {isEditingCaption ? (
-            <>
-              <input type="text" value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="Add a caption..." />
-              <button onClick={handleSaveCaption}>Save</button>
-            </>
-          ) : (
-            <>
-              <p onClick={() => setIsEditingCaption(true)}>{caption || "Click to add caption..."}</p>
-              {caption && <button onClick={() => setIsEditingCaption(true)}>Edit</button>}
-            </>
+              {/* Caption Section */}
+              {isEditingCaption ? (
+                <>
+                  <input type="text" value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="Add a caption..." />
+                  <button onClick={handleSaveCaption}>Save</button>
+                </>
+              ) : (
+                <>
+                  <p onClick={() => setIsEditingCaption(true)}>{caption || "Click to add caption..."}</p>
+                  {caption && <button onClick={() => setIsEditingCaption(true)}>Edit</button>}
+                </>
+              )}
+            </div>
           )}
-        </div>
-      )}
 
-      <button className="delete-btn" onClick={() => onDelete(item.id)}>Delete</button>
-    </div>
+          <button className="delete-btn" onClick={() => onDelete(item.id)}>Delete</button>
+        </div>
   );
 };
 

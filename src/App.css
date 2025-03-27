@@ -64,23 +64,61 @@ h1 {
   font-size: 16px;
 }
 
-.board {
+/* .board {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
-  padding: 20px;
+  margin: 5px 0;
+  padding: 10px;
   align-items: start;
+} */
+
+
+.board {
+  display: grid;
+  gap: 16px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  max-width: 1200px; /* Adjust as needed */
+  width: 100%;
 }
 
-.board-item {
+/* .board-item {
   width: calc(25% - 20px);
   min-width: 200px;
-  max-width: 400px;
+  max-width: 300px;
   border: 1px solid #ccc;
   padding: 10px;
   background: #f9f9f9;
   text-align: left;
+  display: block;
+} */
+
+.board-item {
+  min-width: 200px;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
+  background: #f9f9f9;
+  text-align: left;
+  display: block;
+  position: relative;
+}
+
+.board-item.text {
+  min-height: 100px;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.board-item.gallery {
+  min-height: 200px;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .board-item input[type="file"] {
@@ -107,6 +145,7 @@ button {
 input[type="file"]::file-selector-button {
   color: white;
   background-color: black;
+  border-radius: 5px;
 }
  
 .delete-btn {
@@ -149,4 +188,20 @@ input[type="file"]::file-selector-button {
 
 .carousel .slide .carousel-delete {
   z-index: 10;
+}
+
+@media (min-width: 1200px) { 
+  .board { grid-template-columns: repeat(5, 1fr); } /* 5 items for large screens */
+}
+
+@media (max-width: 900px) { 
+  .board { grid-template-columns: repeat(3, 1fr); } /* 3 items for medium screens */
+}
+
+@media (max-width: 600px) { 
+  .board { grid-template-columns: repeat(2, 1fr); } /* 2 items for small screens */
+}
+
+@media (max-width: 400px) { 
+  .board { grid-template-columns: repeat(1, 1fr); } /* Stack items on very small screens */
 }
