@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import BoardItem from "./BoardItem";
 
-const DragDropBoard = ({ board = [], updateItem }) => {
+const DragDropBoard = ({ board = [], deleteItem, updateItem }) => {
   const [items, setItems] = useState([]);
-
-  // Load board items on mount
+  
   useEffect(() => {
     const storedOrder = JSON.parse(localStorage.getItem("boardOrder"));
     if (storedOrder?.length) {
@@ -16,34 +15,14 @@ const DragDropBoard = ({ board = [], updateItem }) => {
     } else {
       setItems(board);
     }
-  }, [board]);
-
-  // Update local storage whenever items change
+  }, [board]); 
+ 
   useEffect(() => {
     if (items.length) {
       localStorage.setItem("boardOrder", JSON.stringify(items.map((item) => item.id)));
     }
   }, [items]);
 
-  // Function to handle adding a new box (Text or Gallery)
-  const addNewItem = (newItem) => {
-    setItems((prevItems) => {
-      const updatedItems = [...prevItems, newItem];
-      localStorage.setItem("boardOrder", JSON.stringify(updatedItems.map((item) => item.id)));
-      return updatedItems;
-    });
-  };
-
-  // Function to delete an item
-  const handleDelete = (id) => {
-    setItems((prevItems) => {
-      const updatedItems = prevItems.filter((item) => item.id !== id);
-      localStorage.setItem("boardOrder", JSON.stringify(updatedItems.map((item) => item.id)));
-      return updatedItems;
-    });
-  };
-
-  // Drag-and-drop functionality
   useEffect(() => {
     const boardContainer = document.querySelector(".board");
 
@@ -58,9 +37,9 @@ const DragDropBoard = ({ board = [], updateItem }) => {
         } else {
           boardContainer.insertBefore(dragging, afterElement);
         }
-
+        
         const newOrder = [...document.querySelectorAll(".board-item")].map((item) => item.dataset.id);
-        setItems(newOrder.map((id) => items.find((item) => item.id === id)));
+        setItems(newOrder.map((id) => board.find((item) => item.id === id)));
       }
     };
 
@@ -86,7 +65,7 @@ const DragDropBoard = ({ board = [], updateItem }) => {
     return () => {
       boardContainer.removeEventListener("dragover", handleDragOver);
     };
-  }, [items]);
+  }, [items, board]);
 
   const breakpointColumnsObj = {
     default: 4,
@@ -97,13 +76,6 @@ const DragDropBoard = ({ board = [], updateItem }) => {
 
   return (
     <div>
-      <button onClick={() => addNewItem({ id: Date.now().toString(), type: "text", content: "New Text Box" })}>
-        Add Text Box
-      </button>
-      <button onClick={() => addNewItem({ id: Date.now().toString(), type: "gallery", content: "New Gallery Box" })}>
-        Add Gallery Box
-      </button>
-
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className="board"
@@ -124,7 +96,7 @@ const DragDropBoard = ({ board = [], updateItem }) => {
               e.target.classList.remove("dragging");
             }}
           >
-            <BoardItem item={item} onDelete={() => handleDelete(item.id)} onUpdate={updateItem} />
+            <BoardItem item={item} onDelete={deleteItem} onUpdate={updateItem} />
           </div>
         ))}
       </Masonry>
