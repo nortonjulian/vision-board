@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { saveBoard, loadBoard } from "./storage";
-import Masonry from "react-masonry-css";
 import DragDropBoard from "./DragDropBoard";
-import BoardItem from "./BoardItem";
 import "./App.css";
 
 function App() {
@@ -39,13 +37,6 @@ function App() {
   const updateItem = (id, newValue) => {
     setBoard((prevBoard) => prevBoard.map((item) => (item.id === id ? { ...item, ...newValue } : item)));
   };
-
-  const breakpointColumnsObj = {
-    default: 4, 
-    1100: 3,  
-    700: 2,    
-    500: 1     
-  };
   
   return (
     <div>
@@ -60,19 +51,12 @@ function App() {
       Add Gallery
       </button>
 
-        <button onClick={() => addItem("text")}>Add Text</button>
+      <button onClick={() => addItem({ type: "text", content: "New Text" })}>
+          Add Text
+        </button>
       </div>
 
-      <DragDropBoard setBoard={setBoard}>
-        <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="board"
-        columnClassName="board-column">
-        {board.map((item) => (
-          <BoardItem key={item.id} item={item} onDelete={deleteItem} onUpdate={updateItem} />
-        ))}
-        </Masonry>
-      </DragDropBoard>
+      <DragDropBoard board={board} setBoard={setBoard} deleteItem={deleteItem} updateItem={updateItem} />
 
       {/* <div className="container">
         {Array.from({ length: 20 }).map((_, i) => (
