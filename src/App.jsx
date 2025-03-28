@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { saveBoard, loadBoard } from "./storage";
 import Masonry from "react-masonry-css";
+import DragDropBoard from "./DragDropBoard";
 import BoardItem from "./BoardItem";
 import "./App.css";
 
@@ -20,9 +21,14 @@ function App() {
     }
   }, [board, isLoaded])
 
-  const addItem = (type) => {
-    const newItem = { id: Date.now(), type, text: "", images: [], caption: "" }
-    setBoard((prevBoard) => [...prevBoard, newItem]);
+  const addItem = (newItem) => {
+    const newItemWithId = {...newItem, id: Date.now() }
+    console.log("Adding new item:", newItemWithId); 
+    setBoard((prevBoard) => {
+      const updatedBoard = [...prevBoard, newItemWithId];
+      console.log("Updated board:", updatedBoard); 
+      return updatedBoard;
+    });
   };
 
   const deleteItem = (id) => {
@@ -35,39 +41,38 @@ function App() {
   };
 
   const breakpointColumnsObj = {
-    default: 4, // 5 columns on large screens  // 4 columns at 1400px
-    1100: 3,    // 3 columns at 1100px
-    700: 2,     // 2 columns at 800px
-    500: 1      // 1 column at 500px and below
+    default: 4, 
+    1100: 3,  
+    700: 2,    
+    500: 1     
   };
   
   return (
     <div>
       <h1>Vision Board</h1>
       <div className="buttons">
-        <button onClick={() => addItem("gallery")}>Add Gallery</button>
+      <button
+      onClick={() => {
+      console.log("Add Gallery clicked"); 
+      addItem({ type: "gallery", content: "New Gallery" });
+      }}
+      >
+      Add Gallery
+      </button>
+
         <button onClick={() => addItem("text")}>Add Text</button>
       </div>
 
-      {/* <Masonry 
-      breakpointCols={breakpointColumnsObj} 
-      className="board" 
-      columnClassName="board-column"><div className="board">
+      <DragDropBoard setBoard={setBoard}>
+        <Masonry
+        breakpointCols={breakpointColumnsObj}
+        className="board"
+        columnClassName="board-column">
         {board.map((item) => (
           <BoardItem key={item.id} item={item} onDelete={deleteItem} onUpdate={updateItem} />
         ))}
-      </div>
-      </Masonry> */}
-
-      <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className="board"
-      columnClassName="board-column">
-      {board.map((item) => (
-        <BoardItem key={item.id} item={item} onDelete={deleteItem} onUpdate={updateItem} />
-      ))}
-      </Masonry>
-
+        </Masonry>
+      </DragDropBoard>
 
       {/* <div className="container">
         {Array.from({ length: 20 }).map((_, i) => (
