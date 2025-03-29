@@ -1,36 +1,71 @@
-import { useEffect, useRef } from "react";
-import Sortable from "sortablejs";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import Masonry from "react-masonry-css";
+import BoardItem from "./BoardItem";
 
-const DragDropBoard = ({ board = [], setBoard, renderItem }) => {
-    const boardRef = useRef(null);
-  
-    useEffect(() => {
-      if (boardRef.current) {
-        const sortable = Sortable.create(boardRef.current, {
-          animation: 150,
-          onEnd: (evt) => {
-            console.log("Drag event", evt)
-            const newOrder = [...board];
-            const [movedItem] = newOrder.splice(evt.oldIndex, 1);
-            newOrder.splice(evt.newIndex, 0, movedItem);
-            setBoard(newOrder);
+const ItemType = "BOARD_ITEM";
 
-            console.log("New order after drag", newOrder)
-          },
-        });
-  
-        return () => {
-          sortable.destroy();
-        };
+const DraggableItem = ({ item, index, moveItem, deleteItem, updateItem }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: ItemType,
+    item: { id: item.id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [, drop] = useDrop({
+    accept: ItemType,
+    hover: (draggedItem) => {
+      if (draggedItem.index !== index) {
+        moveItem(draggedItem.index, index);
+        draggedItem.index = index;
       }
-    }, [board, setBoard]);
-  
-    return (
-      <div ref={boardRef} className="board">
-        {(board || []).map((item, index) => renderItem(item, index))}
-      </div>
-    );
+    },
+  });
+
+  return (
+    <div
+      ref={(node) => drag(drop(node))}
+      className="board-item"
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
+      <BoardItem item={item} onDelete={deleteItem} onUpdate={updateItem} />
+    </div>
+  );
+};
+
+const DragDropBoard = ({ board, setBoard, deleteItem, updateItem }) => {
+  const moveItem = (fromIndex, toIndex) => {
+    const updatedBoard = [...board];
+    const [movedItem] = updatedBoard.splice(fromIndex, 1);
+    updatedBoard.splice(toIndex, 0, movedItem);
+    setBoard(updatedBoard);
   };
-  
-  export default DragDropBoard;
-  
+
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Masonry breakpointCols={breakpointColumnsObj} className="board" columnClassName="board-column">
+        {board.map((item, index) => (
+          <DraggableItem
+            key={item.id}
+            item={item}
+            index={index}
+            moveItem={moveItem}
+            deleteItem={deleteItem}
+            updateItem={updateItem}
+          />
+        ))}
+      </Masonry>
+    </DndProvider>
+  );
+};
+
+export default DragDropBoard;
