@@ -27,7 +27,7 @@ const DraggableItem = ({ item, index, moveItem, deleteItem, updateItem }) => {
   return (
     <div
       ref={(node) => drag(drop(node))}
-      className="board-item"
+      // className="board-item"
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <BoardItem item={item} onDelete={deleteItem} onUpdate={updateItem} />
