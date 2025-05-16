@@ -40,9 +40,21 @@ const DragDropBoard = ({ board, setBoard, deleteItem, updateItem }) => {
     const updatedBoard = [...board];
     const [movedItem] = updatedBoard.splice(fromIndex, 1);
     updatedBoard.splice(toIndex, 0, movedItem);
+    console.log("Updated board after move:", updatedBoard)
     setBoard(updatedBoard);
   };
-
+  
+  // const DragDropBoard = ({ board, setBoard, deleteItem, updateItem }) => {
+  //   const moveItem = (fromIndex, toIndex) => {
+  //     setBoard((prevBoard) => {
+  //       const updatedBoard = [...prevBoard];
+  //       const [movedItem] = updatedBoard.splice(fromIndex, 1);
+  //       updatedBoard.splice(toIndex, 0, movedItem);
+  //       console.log("Updated board after move:", updatedBoard);
+  //       return updatedBoard;
+  //     });
+  //   };
+    
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -52,7 +64,7 @@ const DragDropBoard = ({ board, setBoard, deleteItem, updateItem }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Masonry breakpointCols={breakpointColumnsObj} className="board" columnClassName="board-column">
+      <Masonry breakpointCols={breakpointColumnsObj} className="board" columnClassName="board-column" style={({ display: 'flex', alignItems: 'stretch' })}>
         {board.map((item, index) => (
           <DraggableItem
             key={item.id}

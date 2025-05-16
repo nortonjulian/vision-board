@@ -19,6 +19,10 @@ function App() {
     }
   }, [board, isLoaded]);
 
+  useEffect(() => {
+    console.log("Board state updated", board)
+  }, [board])
+
   const addItem = (newItem) => {
     const newItemWithId = { ...newItem, id: Date.now() };
     setBoard((prevBoard) => [...prevBoard, newItemWithId]);
@@ -30,24 +34,25 @@ function App() {
 
   const updateItem = (id, newValue) => {
     setBoard((prevBoard) =>
-      prevBoard.map((item) => (item.id === id ? { ...item, ...newValue } : item))
+      prevBoard.map((item) => item.id === id ? { ...item, ...newValue } : item
+      )
     );
   };
 
   return (
-    <div>
-      <h1>Vision Board</h1>
-      <div className="buttons">
-        <button onClick={() => addItem({ type: "gallery", content: "New Gallery" })}>
-          Add Gallery
-        </button>
-        <button onClick={() => addItem({ type: "text", content: "New Text" })}>
-          Add Text
-        </button>
-      </div>
+      <div>
+        <h1>Vision Board</h1>
+        <div className="buttons">
+          <button onClick={() => addItem({ type: "gallery", content: "New Gallery" })}>
+            Add Gallery
+          </button>
+          <button onClick={() => addItem({ type: "text", content: "New Text" })}>
+            Add Text
+          </button>
+        </div>
 
-      <DragDropBoard board={board} setBoard={setBoard} deleteItem={deleteItem} updateItem={updateItem} />
-    </div>
+        <DragDropBoard board={board} setBoard={setBoard} deleteItem={deleteItem} updateItem={updateItem} />
+      </div>
   );
 }
 

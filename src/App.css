@@ -116,6 +116,7 @@ h1 {
 .board-item.gallery {
   min-height: 250px;
   max-height: 500px;
+  height: auto;
   overflow: auto;
 }
 
