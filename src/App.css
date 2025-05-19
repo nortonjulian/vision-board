@@ -81,9 +81,15 @@ h1 {
   column-gap: 10px;
 }
 
+/* .board-column {
+  background-clip: padding-box;
+  padding-left: 10px;
+} */
+
 .board-column {
   background-clip: padding-box;
   padding-left: 10px;
+  z-index: 999;
 }
 
 .board-item.selected {
