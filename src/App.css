@@ -197,7 +197,9 @@ input[type="file"]::file-selector-button {
 
 .carousel-container {
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 80%;
   margin: auto;
   border-radius: 8px;
@@ -220,6 +222,13 @@ input[type="file"]::file-selector-button {
   display: block;
   border-radius: 8px;
 }
+
+/* .carousel-slide img {
+  max-height: 80vh;
+  width: auto;
+  object-fit: contain;
+  margin: auto;
+} */
 
 .carousel-button,
 .carousel-delete {
