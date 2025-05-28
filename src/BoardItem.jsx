@@ -66,7 +66,16 @@ const BoardItem = ({ item, onDelete, onUpdate }) => {
             <div>
               <input type="file" className="custom-file-upload" accept="image/*" multiple onChange={handleImageUpload} />
               
-              {images.length === 1 ? <img src={images[0]} alt="Uploaded" width="100%" /> : <ImageCarousel images={images} setImages={setImages} />}
+              {images.length === 1 ? (
+                <img src={images[0]} alt="Uploaded" width="100%" /> 
+              ) : (
+                  <ImageCarousel 
+                  images={images} 
+                  setImages={setImages}
+                  parentItemId={item.id}
+                  updateItem={onUpdate}
+                   />
+              )}
 
               {/* Caption Section */}
               {isEditingCaption ? (

@@ -2,7 +2,7 @@ import { useState } from "react";
 // import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 
-const ImageCarousel = ({ images, setImages }) => {
+const ImageCarousel = ({ images, setImages, parentItemId, updateItem }) => {
     const [currentIdx, setCurrentIdx] = useState(0);
 
     if (!images || images.length === 0) return null
@@ -20,7 +20,8 @@ const ImageCarousel = ({ images, setImages }) => {
     const handleDelete = (indexToRemove) => {
         const updatedImages = images.filter((_, index) => index !== indexToRemove);
         setImages(updatedImages)
-        localStorage.setItem("images", JSON.stringify(updatedImages))
+        updateItem(parentItemId, { images: updatedImages })
+        // localStorage.setItem("images", JSON.stringify(updatedImages))
 
     if (currentIdx >= updatedImages.length) {
         setCurrentIdx(Math.max(0, updatedImages.length - 1))
@@ -43,11 +44,8 @@ const ImageCarousel = ({ images, setImages }) => {
                     </div>
                 ))}
             </div>
-            <button className="carousel-button prev" onClick={prevSlide}>‹
-            </button>
-            <button className="carousel-button next" onClick={nextSlide}>
-            ›
-            </button>
+            <button className="carousel-button prev" onClick={prevSlide}>‹</button>
+            <button className="carousel-button next" onClick={nextSlide}>›</button>
         </div>
     )
 }
