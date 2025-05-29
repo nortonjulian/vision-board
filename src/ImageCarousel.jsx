@@ -1,11 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 
 const ImageCarousel = ({ images, setImages, parentItemId, updateItem }) => {
+    const storageKey = `carouselIndex-${parentItemId}`
     const [currentIdx, setCurrentIdx] = useState(0);
+    const [isRestored, setIsRestored] = useState(false)
 
-    if (!images || images.length === 0) return null
+    useEffect(() => {
+        if (images && images.length > 0 && !isRestored) {
+            const savedIndex = parseInt(localStorage.getItem(storageKey), 10);
+            if (!isNaN(savedIndex) && savedIndex < images.length) {
+                setCurrentIdx(savedIndex)
+            }
+            setIsRestored(true)
+        }
+    }, [images, storageKey, isRestored])
+
+    useEffect(() => {
+        if (isRestored) {
+            localStorage.setItem(storageKey, currentIdx)
+        }     
+    }, [currentIdx, storageKey, isRestored])
+
+    if (!images || images.length === 0 || !isRestored) return null
 
     const nextSlide = () => {
         setCurrentIdx((prev) => (prev + 1) % images.length);
@@ -23,8 +41,14 @@ const ImageCarousel = ({ images, setImages, parentItemId, updateItem }) => {
         updateItem(parentItemId, { images: updatedImages })
         // localStorage.setItem("images", JSON.stringify(updatedImages))
 
+    // if (currentIdx >= updatedImages.length) {
+    //     setCurrentIdx(Math.max(0, updatedImages.length - 1))
+    // }
+
     if (currentIdx >= updatedImages.length) {
-        setCurrentIdx(Math.max(0, updatedImages.length - 1))
+        const newIdx = Math.max(0, updatedImages.length - 1)
+        setCurrentIdx(newIdx)
+        localStorage.setItem(storageKey, newIdx)
     }
 }
 
