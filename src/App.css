@@ -223,13 +223,6 @@ input[type="file"]::file-selector-button {
   border-radius: 8px;
 }
 
-/* .carousel-slide img {
-  max-height: 80vh;
-  width: auto;
-  object-fit: contain;
-  margin: auto;
-} */
-
 .carousel-button,
 .carousel-delete {
   position: absolute;
